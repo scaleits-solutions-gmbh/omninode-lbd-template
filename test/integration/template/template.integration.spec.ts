@@ -2,7 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { TemplateModule } from '../../../src/module/template/template.module';
 import { TemplateService } from '../../../src/module/template/template.service';
-import { CreateTemplateDto, UpdateTemplateDto } from '../../../src/module/template/dto/input';
+import {
+  CreateTemplateDto,
+  UpdateTemplateDto,
+} from '../../../src/module/template/dto/input';
 
 describe('Template Integration Tests', () => {
   let app: INestApplication;
@@ -48,11 +51,13 @@ describe('Template Integration Tests', () => {
       expect(createdTemplate.updatedAt).toBeDefined();
 
       // Read
-      const retrievedTemplate = await service.getTemplateById(createdTemplate.id);
+      const retrievedTemplate = await service.getTemplateById(
+        createdTemplate.id,
+      );
       expect(retrievedTemplate).toBeDefined();
       expect(retrievedTemplate).not.toBeNull();
-      expect(retrievedTemplate!.id).toBe(createdTemplate.id);
-      expect(retrievedTemplate!.name).toBe(createDto.name);
+      expect(retrievedTemplate.id).toBe(createdTemplate.id);
+      expect(retrievedTemplate.name).toBe(createDto.name);
 
       // Update
       const updateDto: UpdateTemplateDto = {
@@ -60,28 +65,35 @@ describe('Template Integration Tests', () => {
         email: 'updated@test.com',
       };
 
-      const updatedTemplate = await service.updateTemplate(createdTemplate.id, updateDto);
+      const updatedTemplate = await service.updateTemplate(
+        createdTemplate.id,
+        updateDto,
+      );
       expect(updatedTemplate).toBeDefined();
       expect(updatedTemplate).not.toBeNull();
-      expect(updatedTemplate!.id).toBe(createdTemplate.id);
-      expect(updatedTemplate!.name).toBe(updateDto.name);
-      expect(updatedTemplate!.email).toBe(updateDto.email);
-      expect(updatedTemplate!.birthDate).toBe(createDto.birthDate); // Should remain unchanged
+      expect(updatedTemplate.id).toBe(createdTemplate.id);
+      expect(updatedTemplate.name).toBe(updateDto.name);
+      expect(updatedTemplate.email).toBe(updateDto.email);
+      expect(updatedTemplate.birthDate).toBe(createDto.birthDate); // Should remain unchanged
 
       // Verify update was persisted
-      const retrievedUpdatedTemplate = await service.getTemplateById(createdTemplate.id);
+      const retrievedUpdatedTemplate = await service.getTemplateById(
+        createdTemplate.id,
+      );
       expect(retrievedUpdatedTemplate).not.toBeNull();
-      expect(retrievedUpdatedTemplate!.name).toBe(updateDto.name);
-      expect(retrievedUpdatedTemplate!.email).toBe(updateDto.email);
+      expect(retrievedUpdatedTemplate.name).toBe(updateDto.name);
+      expect(retrievedUpdatedTemplate.email).toBe(updateDto.email);
 
       // Delete
       const deletedTemplate = await service.deleteTemplate(createdTemplate.id);
       expect(deletedTemplate).toBeDefined();
       expect(deletedTemplate).not.toBeNull();
-      expect(deletedTemplate!.id).toBe(createdTemplate.id);
+      expect(deletedTemplate.id).toBe(createdTemplate.id);
 
       // Verify deletion
-      await expect(service.getTemplateById(createdTemplate.id)).rejects.toThrow();
+      await expect(
+        service.getTemplateById(createdTemplate.id),
+      ).rejects.toThrow();
     });
 
     it('should handle multiple templates', async () => {
@@ -141,25 +153,37 @@ describe('Template Integration Tests', () => {
 
       try {
         // Test first page
-        const firstPage = await service.getTemplates({ page: '1', pageSize: '5' });
+        const firstPage = await service.getTemplates({
+          page: '1',
+          pageSize: '5',
+        });
         expect(firstPage.data).toHaveLength(5);
         expect(firstPage.page).toBe(1);
         expect(firstPage.pageSize).toBe(5);
         expect(firstPage.total).toBeGreaterThanOrEqual(15);
 
         // Test second page
-        const secondPage = await service.getTemplates({ page: '2', pageSize: '5' });
+        const secondPage = await service.getTemplates({
+          page: '2',
+          pageSize: '5',
+        });
         expect(secondPage.data).toHaveLength(5);
         expect(secondPage.page).toBe(2);
         expect(secondPage.pageSize).toBe(5);
 
         // Test different page size
-        const largePage = await service.getTemplates({ page: '1', pageSize: '10' });
+        const largePage = await service.getTemplates({
+          page: '1',
+          pageSize: '10',
+        });
         expect(largePage.data).toHaveLength(10);
         expect(largePage.pageSize).toBe(10);
 
         // Test last page
-        const lastPage = await service.getTemplates({ page: '3', pageSize: '5' });
+        const lastPage = await service.getTemplates({
+          page: '3',
+          pageSize: '5',
+        });
         expect(lastPage.page).toBe(3);
       } finally {
         // Clean up
@@ -226,11 +250,14 @@ describe('Template Integration Tests', () => {
         name: 'Updated Name Only',
       };
 
-      const updatedTemplate = await service.updateTemplate(createdTemplate.id, updateDto);
+      const updatedTemplate = await service.updateTemplate(
+        createdTemplate.id,
+        updateDto,
+      );
       expect(updatedTemplate).not.toBeNull();
-      expect(updatedTemplate!.name).toBe('Updated Name Only');
-      expect(updatedTemplate!.email).toBe(createDto.email); // Should remain unchanged
-      expect(updatedTemplate!.birthDate).toBe(createDto.birthDate); // Should remain unchanged
+      expect(updatedTemplate.name).toBe('Updated Name Only');
+      expect(updatedTemplate.email).toBe(createDto.email); // Should remain unchanged
+      expect(updatedTemplate.birthDate).toBe(createDto.birthDate); // Should remain unchanged
 
       // Clean up
       await service.deleteTemplate(createdTemplate.id);
@@ -267,4 +294,4 @@ describe('Template Integration Tests', () => {
       }
     });
   });
-}); 
+});

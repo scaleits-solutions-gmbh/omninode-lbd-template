@@ -10,7 +10,7 @@ describe('CreateTemplateDto', () => {
 
   // Helper function to find validation error by property
   const findErrorByProperty = (errors: any[], property: string) => {
-    return errors.find(error => error.property === property);
+    return errors.find((error) => error.property === property);
   };
 
   describe('name validation', () => {
@@ -201,7 +201,7 @@ describe('CreateTemplateDto', () => {
 
     it('should pass validation with different valid date formats', async () => {
       const validDates = ['1990-01-01', '2000-12-31', '1985-06-15'];
-      
+
       for (const date of validDates) {
         createTemplateDto.name = 'Test Template';
         createTemplateDto.email = 'test@example.com';
@@ -293,11 +293,11 @@ describe('CreateTemplateDto', () => {
 
       const errors = await validate(createTemplateDto);
       expect(errors.length).toBeGreaterThanOrEqual(3);
-      
+
       const nameError = findErrorByProperty(errors, 'name');
       const emailError = findErrorByProperty(errors, 'email');
       const birthDateError = findErrorByProperty(errors, 'birthDate');
-      
+
       expect(nameError).toBeDefined();
       expect(emailError).toBeDefined();
       expect(birthDateError).toBeDefined();
@@ -312,4 +312,4 @@ describe('CreateTemplateDto', () => {
       expect(errors).toHaveLength(0);
     });
   });
-}); 
+});

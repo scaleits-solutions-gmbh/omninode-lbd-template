@@ -72,22 +72,24 @@ describe('TemplateController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     // Add global validation pipe and exception filter like in main.ts
     app.useGlobalPipes(new NestJsKit.CustomValidationPipe());
     app.useGlobalFilters(new NestJsKit.GlobalExceptionFilter());
-    
+
     await app.init();
 
     // Get the mocked DAO
-    const { TemplateDao } = require('@scaleits-solutions-gmbh/omninode-lib-database-drizzle');
+    const {
+      TemplateDao,
+    } = require('@scaleits-solutions-gmbh/omninode-lib-database-drizzle');
     mockTemplateDao = TemplateDao;
   });
 
   beforeEach(() => {
     // Reset all mocks
     jest.clearAllMocks();
-    
+
     // Setup default mock responses
     mockTemplateDao.cruds.getTemplates.fetch.mockResolvedValue([]);
     mockTemplateDao.cruds.getTemplates.fetchCount.mockResolvedValue(0);
@@ -142,10 +144,12 @@ describe('TemplateController (e2e)', () => {
       // Mock the service to throw a validation error
       const mockService = moduleFixture.get<TemplateService>(TemplateService);
       const mockSpy = jest.spyOn(mockService, 'getTemplates').mockRejectedValue(
-        new NestJsKit.NestJsBadRequestException(
-          'Validation Failed',
-          [{ message: 'Invalid page parameter', code: 'INVALID_PAGE_PARAMETER' }]
-        )
+        new NestJsKit.NestJsBadRequestException('Validation Failed', [
+          {
+            message: 'Invalid page parameter',
+            code: 'INVALID_PAGE_PARAMETER',
+          },
+        ]),
       );
 
       try {
@@ -180,7 +184,9 @@ describe('TemplateController (e2e)', () => {
   describe('/templates (POST)', () => {
     it('should create a new template', () => {
       // Mock successful creation
-      mockTemplateDao.cruds.createTemplate.create.mockResolvedValue(mockTemplate);
+      mockTemplateDao.cruds.createTemplate.create.mockResolvedValue(
+        mockTemplate,
+      );
 
       return request(app.getHttpServer())
         .post('/templates')
@@ -189,12 +195,20 @@ describe('TemplateController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toHaveProperty('id');
           expect(res.body).toHaveProperty('name', validCreateTemplateDto.name);
-          expect(res.body).toHaveProperty('email', validCreateTemplateDto.email);
-          expect(res.body).toHaveProperty('birthDate', validCreateTemplateDto.birthDate);
+          expect(res.body).toHaveProperty(
+            'email',
+            validCreateTemplateDto.email,
+          );
+          expect(res.body).toHaveProperty(
+            'birthDate',
+            validCreateTemplateDto.birthDate,
+          );
           expect(res.body).toHaveProperty('createdAt');
           expect(res.body).toHaveProperty('updatedAt');
           expect(typeof res.body.id).toBe('string');
-          expect(res.body.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+          expect(res.body.id).toMatch(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+          );
         });
     });
 
@@ -270,7 +284,9 @@ describe('TemplateController (e2e)', () => {
   describe('/templates/:id (GET)', () => {
     it('should return template by ID', () => {
       // Mock successful retrieval
-      mockTemplateDao.cruds.getTemplateById.fetch.mockResolvedValue(mockTemplate);
+      mockTemplateDao.cruds.getTemplateById.fetch.mockResolvedValue(
+        mockTemplate,
+      );
 
       return request(app.getHttpServer())
         .get(`/templates/${mockTemplate.id}`)
@@ -314,7 +330,9 @@ describe('TemplateController (e2e)', () => {
     it('should update template successfully', () => {
       // Mock successful update
       const updatedTemplate = { ...mockTemplate, ...validUpdateTemplateDto };
-      mockTemplateDao.cruds.updateTemplate.update.mockResolvedValue(updatedTemplate);
+      mockTemplateDao.cruds.updateTemplate.update.mockResolvedValue(
+        updatedTemplate,
+      );
 
       return request(app.getHttpServer())
         .put(`/templates/${mockTemplate.id}`)
@@ -323,7 +341,10 @@ describe('TemplateController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toHaveProperty('id', mockTemplate.id);
           expect(res.body).toHaveProperty('name', validUpdateTemplateDto.name);
-          expect(res.body).toHaveProperty('email', validUpdateTemplateDto.email);
+          expect(res.body).toHaveProperty(
+            'email',
+            validUpdateTemplateDto.email,
+          );
           expect(res.body).toHaveProperty('birthDate', mockTemplate.birthDate); // Should remain unchanged
         });
     });
@@ -332,7 +353,9 @@ describe('TemplateController (e2e)', () => {
       // Mock successful partial update
       const partialUpdateDto = { name: 'Partially Updated Template' };
       const updatedTemplate = { ...mockTemplate, ...partialUpdateDto };
-      mockTemplateDao.cruds.updateTemplate.update.mockResolvedValue(updatedTemplate);
+      mockTemplateDao.cruds.updateTemplate.update.mockResolvedValue(
+        updatedTemplate,
+      );
 
       return request(app.getHttpServer())
         .put(`/templates/${mockTemplate.id}`)
@@ -390,7 +413,9 @@ describe('TemplateController (e2e)', () => {
   describe('/templates/:id (DELETE)', () => {
     it('should delete template successfully', () => {
       // Mock successful deletion
-      mockTemplateDao.cruds.deleteTemplate.delete.mockResolvedValue(mockTemplate);
+      mockTemplateDao.cruds.deleteTemplate.delete.mockResolvedValue(
+        mockTemplate,
+      );
 
       return request(app.getHttpServer())
         .delete(`/templates/${mockTemplate.id}`)
@@ -427,8 +452,10 @@ describe('TemplateController (e2e)', () => {
 
     it('should verify template is actually deleted', async () => {
       // Mock successful deletion
-      mockTemplateDao.cruds.deleteTemplate.delete.mockResolvedValue(mockTemplate);
-      
+      mockTemplateDao.cruds.deleteTemplate.delete.mockResolvedValue(
+        mockTemplate,
+      );
+
       // First delete the template
       await request(app.getHttpServer())
         .delete(`/templates/${mockTemplate.id}`)
@@ -458,8 +485,11 @@ describe('TemplateController (e2e)', () => {
       };
 
       // Mock create
-      mockTemplateDao.cruds.createTemplate.create.mockResolvedValue({ ...mockTemplate, ...createDto });
-      
+      mockTemplateDao.cruds.createTemplate.create.mockResolvedValue({
+        ...mockTemplate,
+        ...createDto,
+      });
+
       // Create
       const createResponse = await request(app.getHttpServer())
         .post('/templates')
@@ -469,8 +499,11 @@ describe('TemplateController (e2e)', () => {
       expect(createResponse.body.id).toBe(templateId);
 
       // Mock read
-      mockTemplateDao.cruds.getTemplateById.fetch.mockResolvedValue({ ...mockTemplate, ...createDto });
-      
+      mockTemplateDao.cruds.getTemplateById.fetch.mockResolvedValue({
+        ...mockTemplate,
+        ...createDto,
+      });
+
       // Read
       await request(app.getHttpServer())
         .get(`/templates/${templateId}`)
@@ -482,8 +515,10 @@ describe('TemplateController (e2e)', () => {
 
       // Mock update
       const updatedTemplate = { ...mockTemplate, ...createDto, ...updateDto };
-      mockTemplateDao.cruds.updateTemplate.update.mockResolvedValue(updatedTemplate);
-      
+      mockTemplateDao.cruds.updateTemplate.update.mockResolvedValue(
+        updatedTemplate,
+      );
+
       // Update
       await request(app.getHttpServer())
         .put(`/templates/${templateId}`)
@@ -495,8 +530,10 @@ describe('TemplateController (e2e)', () => {
         });
 
       // Mock read after update
-      mockTemplateDao.cruds.getTemplateById.fetch.mockResolvedValue(updatedTemplate);
-      
+      mockTemplateDao.cruds.getTemplateById.fetch.mockResolvedValue(
+        updatedTemplate,
+      );
+
       // Verify update
       await request(app.getHttpServer())
         .get(`/templates/${templateId}`)
@@ -507,8 +544,10 @@ describe('TemplateController (e2e)', () => {
         });
 
       // Mock delete
-      mockTemplateDao.cruds.deleteTemplate.delete.mockResolvedValue(updatedTemplate);
-      
+      mockTemplateDao.cruds.deleteTemplate.delete.mockResolvedValue(
+        updatedTemplate,
+      );
+
       // Delete
       await request(app.getHttpServer())
         .delete(`/templates/${templateId}`)
@@ -516,7 +555,7 @@ describe('TemplateController (e2e)', () => {
 
       // Mock not found for verification
       mockTemplateDao.cruds.getTemplateById.fetch.mockResolvedValue(null);
-      
+
       // Verify deletion
       await request(app.getHttpServer())
         .get(`/templates/${templateId}`)
@@ -529,7 +568,9 @@ describe('TemplateController (e2e)', () => {
       return request(app.getHttpServer())
         .post('/templates')
         .set('Content-Type', 'application/json')
-        .send('{"name": "test", "email": "test@test.com", "birthDate": "1990-01-01"') // Missing closing brace
+        .send(
+          '{"name": "test", "email": "test@test.com", "birthDate": "1990-01-01"',
+        ) // Missing closing brace
         .expect(400);
     });
 
@@ -545,4 +586,4 @@ describe('TemplateController (e2e)', () => {
         .expect(404);
     });
   });
-}); 
+});

@@ -105,4 +105,4 @@ describe('TemplateModule', () => {
       expect(service).toBeDefined();
     });
   });
-}); 
+});

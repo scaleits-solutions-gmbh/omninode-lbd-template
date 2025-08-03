@@ -109,7 +109,7 @@ export class TemplateService {
     }
   }
 
-  async getTemplateById(id: string): Promise<TemplateDto | null> {
+  async getTemplateById(id: string): Promise<TemplateDto> {
     const startTime = Date.now();
     this.logger.debug(`Fetching template by ID: ${id}`);
 
@@ -176,7 +176,7 @@ export class TemplateService {
   async updateTemplate(
     id: string,
     updateTemplateDto: UpdateTemplateDto,
-  ): Promise<TemplateDto | null> {
+  ): Promise<TemplateDto> {
     const startTime = Date.now();
     this.logger.debug(
       `Updating template ${id}: ${JSON.stringify(updateTemplateDto)}`,
@@ -190,7 +190,12 @@ export class TemplateService {
 
       if (!template) {
         this.logger.warn(`Template not found for update with ID: ${id}`);
-        return null;
+        throw new NestJsKit.NestJsNotFoundException('Template not found', [
+          {
+            message: 'Template not found',
+            code: 'TEMPLATE_NOT_FOUND',
+          },
+        ]);
       }
 
       const duration = Date.now() - startTime;
@@ -209,7 +214,7 @@ export class TemplateService {
     }
   }
 
-  async deleteTemplate(id: string): Promise<TemplateDto | null> {
+  async deleteTemplate(id: string): Promise<TemplateDto> {
     const startTime = Date.now();
     this.logger.debug(`Deleting template: ${id}`);
 
@@ -218,7 +223,12 @@ export class TemplateService {
 
       if (!template) {
         this.logger.warn(`Template not found for deletion with ID: ${id}`);
-        return null;
+        throw new NestJsKit.NestJsNotFoundException('Template not found', [
+          {
+            message: 'Template not found',
+            code: 'TEMPLATE_NOT_FOUND',
+          },
+        ]);
       }
 
       const duration = Date.now() - startTime;

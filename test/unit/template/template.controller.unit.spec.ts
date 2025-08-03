@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TemplateController } from '../../../src/module/template/template.controller';
 import { TemplateService } from '../../../src/module/template/template.service';
-import { CreateTemplateDto, UpdateTemplateDto, GetTemplateByIdDto } from '../../../src/module/template/dto/input';
+import {
+  CreateTemplateDto,
+  UpdateTemplateDto,
+  GetTemplateByIdDto,
+} from '../../../src/module/template/dto/input';
 import { TemplateDtoUtils } from '../../../src/module/template/dto/output';
 
 describe('TemplateController', () => {
@@ -49,7 +53,9 @@ describe('TemplateController', () => {
 
   describe('getTemplates', () => {
     it('should return paginated templates', async () => {
-      jest.spyOn(service, 'getTemplates').mockResolvedValue(mockPaginatedResponse);
+      jest
+        .spyOn(service, 'getTemplates')
+        .mockResolvedValue(mockPaginatedResponse);
 
       const result = await controller.getTemplates({});
 
@@ -59,7 +65,9 @@ describe('TemplateController', () => {
 
     it('should handle query parameters', async () => {
       const query = { page: '2', pageSize: '5' };
-      jest.spyOn(service, 'getTemplates').mockResolvedValue(mockPaginatedResponse);
+      jest
+        .spyOn(service, 'getTemplates')
+        .mockResolvedValue(mockPaginatedResponse);
 
       await controller.getTemplates(query);
 
@@ -116,7 +124,9 @@ describe('TemplateController', () => {
       const error = new Error('Template not found');
       jest.spyOn(service, 'getTemplateById').mockRejectedValue(error);
 
-      await expect(controller.getTemplate(dto)).rejects.toThrow('Template not found');
+      await expect(controller.getTemplate(dto)).rejects.toThrow(
+        'Template not found',
+      );
     });
   });
 
@@ -147,7 +157,9 @@ describe('TemplateController', () => {
       const error = new Error('Creation failed');
       jest.spyOn(service, 'createTemplate').mockRejectedValue(error);
 
-      await expect(controller.createTemplate(createDto)).rejects.toThrow('Creation failed');
+      await expect(controller.createTemplate(createDto)).rejects.toThrow(
+        'Creation failed',
+      );
     });
   });
 
@@ -166,7 +178,10 @@ describe('TemplateController', () => {
 
       const result = await controller.updateTemplate(dto, updateDto);
 
-      expect(service.updateTemplate).toHaveBeenCalledWith(templateId, updateDto);
+      expect(service.updateTemplate).toHaveBeenCalledWith(
+        templateId,
+        updateDto,
+      );
       expect(result).toEqual(updatedTemplate);
     });
 
@@ -181,7 +196,9 @@ describe('TemplateController', () => {
       const error = new Error('Update failed');
       jest.spyOn(service, 'updateTemplate').mockRejectedValue(error);
 
-      await expect(controller.updateTemplate(dto, updateDto)).rejects.toThrow('Update failed');
+      await expect(controller.updateTemplate(dto, updateDto)).rejects.toThrow(
+        'Update failed',
+      );
     });
 
     it('should handle template not found for update', async () => {
@@ -195,7 +212,9 @@ describe('TemplateController', () => {
       const error = new Error('Template not found');
       jest.spyOn(service, 'updateTemplate').mockRejectedValue(error);
 
-      await expect(controller.updateTemplate(dto, updateDto)).rejects.toThrow('Template not found');
+      await expect(controller.updateTemplate(dto, updateDto)).rejects.toThrow(
+        'Template not found',
+      );
     });
   });
 
@@ -221,7 +240,9 @@ describe('TemplateController', () => {
       const error = new Error('Deletion failed');
       jest.spyOn(service, 'deleteTemplate').mockRejectedValue(error);
 
-      await expect(controller.deleteTemplate(dto)).rejects.toThrow('Deletion failed');
+      await expect(controller.deleteTemplate(dto)).rejects.toThrow(
+        'Deletion failed',
+      );
     });
 
     it('should handle template not found for deletion', async () => {
@@ -232,7 +253,9 @@ describe('TemplateController', () => {
       const error = new Error('Template not found');
       jest.spyOn(service, 'deleteTemplate').mockRejectedValue(error);
 
-      await expect(controller.deleteTemplate(dto)).rejects.toThrow('Template not found');
+      await expect(controller.deleteTemplate(dto)).rejects.toThrow(
+        'Template not found',
+      );
     });
   });
 
@@ -264,7 +287,10 @@ describe('TemplateController', () => {
 
       await controller.updateTemplate(dto, updateDto);
 
-      expect(service.updateTemplate).toHaveBeenCalledWith(templateId, updateDto);
+      expect(service.updateTemplate).toHaveBeenCalledWith(
+        templateId,
+        updateDto,
+      );
     });
 
     it('should validate GetTemplateByIdDto', async () => {
@@ -285,7 +311,9 @@ describe('TemplateController', () => {
       const error = new Error('Service error');
       jest.spyOn(service, 'getTemplates').mockRejectedValue(error);
 
-      await expect(controller.getTemplates({})).rejects.toThrow('Service error');
+      await expect(controller.getTemplates({})).rejects.toThrow(
+        'Service error',
+      );
     });
 
     it('should handle validation errors', async () => {
@@ -304,4 +332,4 @@ describe('TemplateController', () => {
       expect(typeof controller.createTemplate).toBe('function');
     });
   });
-}); 
+});

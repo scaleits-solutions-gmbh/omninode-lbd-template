@@ -1,4 +1,7 @@
-import { TemplateDtoUtils, TemplateDto } from '../../../../../src/module/template/dto/output/template.dto';
+import {
+  TemplateDtoUtils,
+  TemplateDto,
+} from '../../../../../src/module/template/dto/output/template.dto';
 
 describe('TemplateDto', () => {
   describe('TemplateDtoUtils.parseTemplateDto', () => {
@@ -26,7 +29,9 @@ describe('TemplateDto', () => {
         updatedAt: new Date('2023-01-01T00:00:00.000Z'),
       };
 
-      expect(() => TemplateDtoUtils.parseTemplateDto(invalidTemplate)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDto(invalidTemplate),
+      ).toThrow();
     });
 
     it('should throw error for invalid email', () => {
@@ -39,7 +44,9 @@ describe('TemplateDto', () => {
         updatedAt: new Date('2023-01-01T00:00:00.000Z'),
       };
 
-      expect(() => TemplateDtoUtils.parseTemplateDto(invalidTemplate)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDto(invalidTemplate),
+      ).toThrow();
     });
 
     it('should throw error for missing required fields', () => {
@@ -52,7 +59,9 @@ describe('TemplateDto', () => {
         updatedAt: new Date('2023-01-01T00:00:00.000Z'),
       };
 
-      expect(() => TemplateDtoUtils.parseTemplateDto(invalidTemplate)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDto(invalidTemplate),
+      ).toThrow();
     });
 
     it('should throw error for wrong data types', () => {
@@ -65,7 +74,9 @@ describe('TemplateDto', () => {
         updatedAt: new Date('2023-01-01T00:00:00.000Z'),
       };
 
-      expect(() => TemplateDtoUtils.parseTemplateDto(invalidTemplate)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDto(invalidTemplate),
+      ).toThrow();
     });
 
     it('should handle null input', () => {
@@ -73,7 +84,9 @@ describe('TemplateDto', () => {
     });
 
     it('should handle undefined input', () => {
-      expect(() => TemplateDtoUtils.parseTemplateDto(undefined as any)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDto(undefined as any),
+      ).toThrow();
     });
 
     it('should handle empty object', () => {
@@ -126,7 +139,9 @@ describe('TemplateDto', () => {
         },
       ];
 
-      expect(() => TemplateDtoUtils.parseTemplateDtoList(invalidTemplates)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDtoList(invalidTemplates),
+      ).toThrow();
     });
 
     it('should handle empty array', () => {
@@ -135,22 +150,28 @@ describe('TemplateDto', () => {
     });
 
     it('should handle null input', () => {
-      expect(() => TemplateDtoUtils.parseTemplateDtoList(null as any)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDtoList(null as any),
+      ).toThrow();
     });
 
     it('should handle undefined input', () => {
-      expect(() => TemplateDtoUtils.parseTemplateDtoList(undefined as any)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDtoList(undefined as any),
+      ).toThrow();
     });
 
     it('should handle non-array input', () => {
-      expect(() => TemplateDtoUtils.parseTemplateDtoList('not-an-array' as any)).toThrow();
+      expect(() =>
+        TemplateDtoUtils.parseTemplateDtoList('not-an-array' as any),
+      ).toThrow();
     });
   });
 
   describe('TemplateDtoUtils.templateDtoSchema', () => {
     it('should validate correct schema structure', () => {
       const schema = TemplateDtoUtils.templateDtoSchema;
-      
+
       expect(schema.shape.id).toBeDefined();
       expect(schema.shape.name).toBeDefined();
       expect(schema.shape.email).toBeDefined();
@@ -161,7 +182,7 @@ describe('TemplateDto', () => {
 
     it('should have correct field types', () => {
       const schema = TemplateDtoUtils.templateDtoSchema;
-      
+
       // Test that the schema correctly validates UUID
       const validResult = schema.safeParse({
         id: '123e4567-e89b-12d3-a456-426614174000',
@@ -171,13 +192,13 @@ describe('TemplateDto', () => {
         createdAt: new Date('2023-01-01T00:00:00.000Z'),
         updatedAt: new Date('2023-01-01T00:00:00.000Z'),
       });
-      
+
       expect(validResult.success).toBe(true);
     });
 
     it('should reject invalid UUID format', () => {
       const schema = TemplateDtoUtils.templateDtoSchema;
-      
+
       const invalidResult = schema.safeParse({
         id: 'invalid-uuid',
         name: 'Test Template',
@@ -186,13 +207,13 @@ describe('TemplateDto', () => {
         createdAt: new Date('2023-01-01T00:00:00.000Z'),
         updatedAt: new Date('2023-01-01T00:00:00.000Z'),
       });
-      
+
       expect(invalidResult.success).toBe(false);
     });
 
     it('should reject invalid email format', () => {
       const schema = TemplateDtoUtils.templateDtoSchema;
-      
+
       const invalidResult = schema.safeParse({
         id: '123e4567-e89b-12d3-a456-426614174000',
         name: 'Test Template',
@@ -201,7 +222,7 @@ describe('TemplateDto', () => {
         createdAt: new Date('2023-01-01T00:00:00.000Z'),
         updatedAt: new Date('2023-01-01T00:00:00.000Z'),
       });
-      
+
       expect(invalidResult.success).toBe(false);
     });
   });
@@ -226,4 +247,4 @@ describe('TemplateDto', () => {
       expect(template.updatedAt).toBeInstanceOf(Date);
     });
   });
-}); 
+});

@@ -8,7 +8,6 @@ import {
   Body,
   Query,
 } from '@nestjs/common';
-import { NestJsKit } from '@scaleits-solutions-gmbh/org-lib-backend-common-kit';
 import { TemplateService } from './template.service';
 import {
   TemplateDto,
@@ -41,14 +40,7 @@ export class TemplateController {
     const template = await this.templateService.getTemplateById(
       getTemplateByIdDto.templateId,
     );
-    if (!template) {
-      throw new NestJsKit.NestJsNotFoundException('Template not found', [
-        {
-          message: 'Template not found',
-          code: 'TEMPLATE_NOT_FOUND',
-        },
-      ]);
-    }
+
     return template;
   }
 
@@ -68,14 +60,7 @@ export class TemplateController {
       getTemplateByIdDto.templateId,
       updateTemplateDto,
     );
-    if (!template) {
-      throw new NestJsKit.NestJsNotFoundException('Template not found', [
-        {
-          message: 'Template not found',
-          code: 'TEMPLATE_NOT_FOUND',
-        },
-      ]);
-    }
+
     return template;
   }
 
@@ -86,14 +71,7 @@ export class TemplateController {
     const template = await this.templateService.deleteTemplate(
       getTemplateByIdDto.templateId,
     );
-    if (!template) {
-      throw new NestJsKit.NestJsNotFoundException('Template not found', [
-        {
-          message: 'Template not found',
-          code: 'TEMPLATE_NOT_FOUND',
-        },
-      ]);
-    }
+
     return template;
   }
 }

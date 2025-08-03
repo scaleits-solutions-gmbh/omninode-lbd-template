@@ -2,8 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Logger } from '@nestjs/common';
 import { TemplateService } from '../../../src/module/template/template.service';
 import { TemplateDao } from '@scaleits-solutions-gmbh/omninode-lib-database-drizzle';
-import { NestJsKit, buildCustomParamsFromQuery } from '@scaleits-solutions-gmbh/org-lib-backend-common-kit';
-import { CreateTemplateDto, UpdateTemplateDto, GetTemplateByIdDto } from '../../../src/module/template/dto/input';
+import {
+  NestJsKit,
+  buildCustomParamsFromQuery,
+} from '@scaleits-solutions-gmbh/org-lib-backend-common-kit';
+import {
+  CreateTemplateDto,
+  UpdateTemplateDto,
+  GetTemplateByIdDto,
+} from '../../../src/module/template/dto/input';
 import { TemplateDtoUtils } from '../../../src/module/template/dto/output';
 
 // Mock the DAO
@@ -17,24 +24,24 @@ jest.mock('@scaleits-solutions-gmbh/omninode-lib-database-drizzle', () => ({
         allowedSortOptions: [],
         maxPageSize: 100,
         defaultParams: {
-          paginationOption: { page: 1, limit: 10 }
-        }
+          paginationOption: { page: 1, limit: 10 },
+        },
       },
       getTemplatesCount: {
-        fetch: jest.fn()
+        fetch: jest.fn(),
       },
       getTemplateById: {
-        fetch: jest.fn()
+        fetch: jest.fn(),
       },
       createTemplate: {
-        create: jest.fn()
+        create: jest.fn(),
       },
       updateTemplate: {
-        update: jest.fn()
+        update: jest.fn(),
       },
       deleteTemplate: {
-        delete: jest.fn()
-      }
+        delete: jest.fn(),
+      },
     },
   },
 }));
@@ -55,7 +62,9 @@ jest.mock('@scaleits-solutions-gmbh/org-lib-backend-common-kit', () => ({
 describe('TemplateService', () => {
   let service: TemplateService;
   let mockTemplateDao: jest.Mocked<typeof TemplateDao>;
-  let mockBuildCustomParamsFromQuery: jest.MockedFunction<typeof buildCustomParamsFromQuery>;
+  let mockBuildCustomParamsFromQuery: jest.MockedFunction<
+    typeof buildCustomParamsFromQuery
+  >;
 
   const mockTemplate = {
     id: 'bbf81e77-17eb-49f5-a910-fb1127b156cf',
@@ -73,11 +82,14 @@ describe('TemplateService', () => {
 
     service = module.get<TemplateService>(TemplateService);
     mockTemplateDao = TemplateDao as jest.Mocked<typeof TemplateDao>;
-    mockBuildCustomParamsFromQuery = buildCustomParamsFromQuery as jest.MockedFunction<typeof buildCustomParamsFromQuery>;
+    mockBuildCustomParamsFromQuery =
+      buildCustomParamsFromQuery as jest.MockedFunction<
+        typeof buildCustomParamsFromQuery
+      >;
 
     // Reset all mocks
     jest.clearAllMocks();
-    
+
     // Properly type the mock functions
     (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockReset();
     (mockTemplateDao.cruds.getTemplates.fetchCount as jest.Mock).mockReset();
@@ -86,13 +98,13 @@ describe('TemplateService', () => {
     (mockTemplateDao.cruds.createTemplate.create as jest.Mock).mockReset();
     (mockTemplateDao.cruds.updateTemplate.update as jest.Mock).mockReset();
     (mockTemplateDao.cruds.deleteTemplate.delete as jest.Mock).mockReset();
-    
+
     // Setup buildCustomParamsFromQuery mock
     mockBuildCustomParamsFromQuery.mockReturnValue({
       success: true,
       customParams: {
-        paginationOption: { page: 1, limit: 10 }
-      }
+        paginationOption: { page: 1, limit: 10 },
+      },
     });
   });
 
@@ -100,9 +112,13 @@ describe('TemplateService', () => {
     it('should return paginated templates', async () => {
       const mockTemplates = [mockTemplate];
       const mockCount = 1;
-      
-      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockResolvedValue(mockTemplates);
-      (mockTemplateDao.cruds.getTemplates.fetchCount as jest.Mock).mockResolvedValue(mockCount);
+
+      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockResolvedValue(
+        mockTemplates,
+      );
+      (
+        mockTemplateDao.cruds.getTemplates.fetchCount as jest.Mock
+      ).mockResolvedValue(mockCount);
 
       const result = await service.getTemplates({});
 
@@ -113,8 +129,12 @@ describe('TemplateService', () => {
     });
 
     it('should handle empty results', async () => {
-      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockResolvedValue([]);
-      (mockTemplateDao.cruds.getTemplates.fetchCount as jest.Mock).mockResolvedValue(0);
+      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockResolvedValue(
+        [],
+      );
+      (
+        mockTemplateDao.cruds.getTemplates.fetchCount as jest.Mock
+      ).mockResolvedValue(0);
 
       const result = await service.getTemplates({});
 
@@ -124,15 +144,19 @@ describe('TemplateService', () => {
 
     it('should handle query parameters', async () => {
       const query = { page: '2', pageSize: '5' };
-      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockResolvedValue([]);
-      (mockTemplateDao.cruds.getTemplates.fetchCount as jest.Mock).mockResolvedValue(0);
-      
+      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockResolvedValue(
+        [],
+      );
+      (
+        mockTemplateDao.cruds.getTemplates.fetchCount as jest.Mock
+      ).mockResolvedValue(0);
+
       // Mock buildCustomParamsFromQuery to return the expected parameters
       mockBuildCustomParamsFromQuery.mockReturnValue({
         success: true,
         customParams: {
-          paginationOption: { page: 2, limit: 5 }
-        }
+          paginationOption: { page: 2, limit: 5 },
+        },
       });
 
       await service.getTemplates(query);
@@ -143,7 +167,7 @@ describe('TemplateService', () => {
             page: 2,
             limit: 5,
           }),
-        })
+        }),
       );
     });
   });
@@ -151,7 +175,9 @@ describe('TemplateService', () => {
   describe('getTemplatesCount', () => {
     it('should return templates count', async () => {
       const mockCount = 5;
-      (mockTemplateDao.cruds.getTemplatesCount.fetch as jest.Mock).mockResolvedValue(mockCount);
+      (
+        mockTemplateDao.cruds.getTemplatesCount.fetch as jest.Mock
+      ).mockResolvedValue(mockCount);
 
       const result = await service.getTemplatesCount();
 
@@ -163,20 +189,27 @@ describe('TemplateService', () => {
   describe('getTemplateById', () => {
     it('should return template by ID', async () => {
       const templateId = '4d54519a-447d-4229-b697-6dcd96922647';
-      (mockTemplateDao.cruds.getTemplateById.fetch as jest.Mock).mockResolvedValue(mockTemplate);
+      (
+        mockTemplateDao.cruds.getTemplateById.fetch as jest.Mock
+      ).mockResolvedValue(mockTemplate);
 
       const result = await service.getTemplateById(templateId);
 
-      expect(mockTemplateDao.cruds.getTemplateById.fetch).toHaveBeenCalledWith(templateId);
+      expect(mockTemplateDao.cruds.getTemplateById.fetch).toHaveBeenCalledWith(
+        templateId,
+      );
       expect(result).toEqual(mockTemplate);
     });
 
     it('should throw NotFoundException when template not found', async () => {
       const templateId = '2c74ed65-4a90-4a24-893f-e1cc1b826c46';
-      const mockFetch = mockTemplateDao.cruds.getTemplateById.fetch as jest.Mock;
+      const mockFetch = mockTemplateDao.cruds.getTemplateById
+        .fetch as jest.Mock;
       mockFetch.mockResolvedValue(null);
 
-      await expect(service.getTemplateById(templateId)).rejects.toThrow('Template not found');
+      await expect(service.getTemplateById(templateId)).rejects.toThrow(
+        'Template not found',
+      );
       expect(mockFetch).toHaveBeenCalledWith(templateId);
     });
   });
@@ -190,11 +223,15 @@ describe('TemplateService', () => {
       };
 
       const createdTemplate = { ...mockTemplate, ...createDto };
-      (mockTemplateDao.cruds.createTemplate.create as jest.Mock).mockResolvedValue(createdTemplate);
+      (
+        mockTemplateDao.cruds.createTemplate.create as jest.Mock
+      ).mockResolvedValue(createdTemplate);
 
       const result = await service.createTemplate(createDto);
 
-      expect(mockTemplateDao.cruds.createTemplate.create).toHaveBeenCalledWith(createDto);
+      expect(mockTemplateDao.cruds.createTemplate.create).toHaveBeenCalledWith(
+        createDto,
+      );
       expect(result).toEqual(createdTemplate);
     });
 
@@ -205,9 +242,13 @@ describe('TemplateService', () => {
         birthDate: '1995-05-15',
       };
 
-      (mockTemplateDao.cruds.createTemplate.create as jest.Mock).mockRejectedValue(new Error('Database error'));
+      (
+        mockTemplateDao.cruds.createTemplate.create as jest.Mock
+      ).mockRejectedValue(new Error('Database error'));
 
-      await expect(service.createTemplate(createDto)).rejects.toThrow('Database error');
+      await expect(service.createTemplate(createDto)).rejects.toThrow(
+        'Database error',
+      );
     });
   });
 
@@ -220,11 +261,16 @@ describe('TemplateService', () => {
       };
 
       const updatedTemplate = { ...mockTemplate, ...updateDto };
-      (mockTemplateDao.cruds.updateTemplate.update as jest.Mock).mockResolvedValue(updatedTemplate);
+      (
+        mockTemplateDao.cruds.updateTemplate.update as jest.Mock
+      ).mockResolvedValue(updatedTemplate);
 
       const result = await service.updateTemplate(templateId, updateDto);
 
-      expect(mockTemplateDao.cruds.updateTemplate.update).toHaveBeenCalledWith(templateId, updateDto);
+      expect(mockTemplateDao.cruds.updateTemplate.update).toHaveBeenCalledWith(
+        templateId,
+        updateDto,
+      );
       expect(result).toEqual(updatedTemplate);
     });
 
@@ -234,7 +280,9 @@ describe('TemplateService', () => {
         name: 'Updated Template',
       };
 
-      (mockTemplateDao.cruds.updateTemplate.update as jest.Mock).mockResolvedValue(null);
+      (
+        mockTemplateDao.cruds.updateTemplate.update as jest.Mock
+      ).mockResolvedValue(null);
 
       const result = await service.updateTemplate(templateId, updateDto);
       expect(result).toBeNull();
@@ -246,26 +294,36 @@ describe('TemplateService', () => {
         name: 'Updated Template',
       };
 
-      (mockTemplateDao.cruds.updateTemplate.update as jest.Mock).mockRejectedValue(new Error('Update error'));
+      (
+        mockTemplateDao.cruds.updateTemplate.update as jest.Mock
+      ).mockRejectedValue(new Error('Update error'));
 
-      await expect(service.updateTemplate(templateId, updateDto)).rejects.toThrow('Update error');
+      await expect(
+        service.updateTemplate(templateId, updateDto),
+      ).rejects.toThrow('Update error');
     });
   });
 
   describe('deleteTemplate', () => {
     it('should delete template successfully', async () => {
       const templateId = 'f9d07938-2eb8-4b29-83f8-1b5921cdfade';
-      (mockTemplateDao.cruds.deleteTemplate.delete as jest.Mock).mockResolvedValue(mockTemplate);
+      (
+        mockTemplateDao.cruds.deleteTemplate.delete as jest.Mock
+      ).mockResolvedValue(mockTemplate);
 
       const result = await service.deleteTemplate(templateId);
 
-      expect(mockTemplateDao.cruds.deleteTemplate.delete).toHaveBeenCalledWith(templateId);
+      expect(mockTemplateDao.cruds.deleteTemplate.delete).toHaveBeenCalledWith(
+        templateId,
+      );
       expect(result).toEqual(mockTemplate);
     });
 
     it('should return null when template not found for deletion', async () => {
       const templateId = 'fa00a5bd-47e7-42cc-afdb-10473e7cc323';
-      (mockTemplateDao.cruds.deleteTemplate.delete as jest.Mock).mockResolvedValue(null);
+      (
+        mockTemplateDao.cruds.deleteTemplate.delete as jest.Mock
+      ).mockResolvedValue(null);
 
       const result = await service.deleteTemplate(templateId);
       expect(result).toBeNull();
@@ -273,24 +331,36 @@ describe('TemplateService', () => {
 
     it('should handle deletion error', async () => {
       const templateId = '7e52a65d-52c0-4ac9-b2c6-24c5258933e7';
-      (mockTemplateDao.cruds.deleteTemplate.delete as jest.Mock).mockRejectedValue(new Error('Delete error'));
+      (
+        mockTemplateDao.cruds.deleteTemplate.delete as jest.Mock
+      ).mockRejectedValue(new Error('Delete error'));
 
-      await expect(service.deleteTemplate(templateId)).rejects.toThrow('Delete error');
+      await expect(service.deleteTemplate(templateId)).rejects.toThrow(
+        'Delete error',
+      );
     });
   });
 
   describe('error handling', () => {
     it('should handle DAO errors gracefully', async () => {
       const error = new Error('Database connection failed');
-      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockRejectedValue(error);
+      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockRejectedValue(
+        error,
+      );
 
-      await expect(service.getTemplates({})).rejects.toThrow('Database connection failed');
+      await expect(service.getTemplates({})).rejects.toThrow(
+        'Database connection failed',
+      );
     });
 
     it('should log errors appropriately', async () => {
-      const loggerSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+      const loggerSpy = jest
+        .spyOn(Logger.prototype, 'error')
+        .mockImplementation();
       const error = new Error('Test error');
-      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockRejectedValue(error);
+      (mockTemplateDao.cruds.getTemplates.fetch as jest.Mock).mockRejectedValue(
+        error,
+      );
 
       try {
         await service.getTemplates({});
@@ -302,4 +372,4 @@ describe('TemplateService', () => {
       loggerSpy.mockRestore();
     });
   });
-}); 
+});
