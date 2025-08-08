@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TemplateController } from './template.controller';
-import { TemplateService } from './template.service';
+import { TemplateCrudsController } from './cruds/template.cruds.controller';
+import { TemplateCrudsService } from './cruds/template.cruds.service';
 
 @Module({
-  controllers: [TemplateController],
-  providers: [TemplateService],
-  exports: [TemplateService],
+  controllers: [TemplateCrudsController],
+  providers: [TemplateCrudsService],
+  exports: [TemplateCrudsService],
 })
 export class TemplateModule {}

@@ -20,8 +20,8 @@ import {
 } from './dto';
 
 @Injectable()
-export class TemplateService {
-  private readonly logger = new Logger(TemplateService.name);
+export class TemplateCrudsService {
+  private readonly logger = new Logger(TemplateCrudsService.name);
 
   async getTemplates(
     query: Record<string, string>,
@@ -128,6 +128,7 @@ export class TemplateService {
 
       const duration = Date.now() - startTime;
       this.logger.log(`Successfully retrieved template ${id} in ${duration}ms`);
+
       return TemplateDtoUtils.parseTemplateDto(template);
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -200,6 +201,7 @@ export class TemplateService {
 
       const duration = Date.now() - startTime;
       this.logger.log(`Successfully updated template ${id} in ${duration}ms`);
+
       return TemplateDtoUtils.parseTemplateDto(template);
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -233,6 +235,7 @@ export class TemplateService {
 
       const duration = Date.now() - startTime;
       this.logger.log(`Successfully deleted template ${id} in ${duration}ms`);
+
       return TemplateDtoUtils.parseTemplateDto(template);
     } catch (error) {
       const duration = Date.now() - startTime;

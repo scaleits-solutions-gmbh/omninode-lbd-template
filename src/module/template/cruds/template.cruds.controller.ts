@@ -8,7 +8,7 @@ import {
   Body,
   Query,
 } from '@nestjs/common';
-import { TemplateService } from './template.service';
+import { TemplateCrudsService } from './template.cruds.service';
 import {
   TemplateDto,
   CreateTemplateDto,
@@ -17,27 +17,27 @@ import {
 } from './dto';
 import { PaginatedData } from '@scaleits-solutions-gmbh/org-lib-global-common-kit';
 
-@Controller('templates')
-export class TemplateController {
-  constructor(private readonly templateService: TemplateService) {}
+@Controller('templates/cruds')
+export class TemplateCrudsController {
+  constructor(private readonly templateCrudsService: TemplateCrudsService) {}
 
   @Get()
   async getTemplates(
     @Query() query: Record<string, string>,
   ): Promise<PaginatedData<TemplateDto>> {
-    return this.templateService.getTemplates(query);
+    return this.templateCrudsService.getTemplates(query);
   }
 
   @Get('/count')
   async getTemplatesCount(): Promise<{ count: number }> {
-    return this.templateService.getTemplatesCount();
+    return this.templateCrudsService.getTemplatesCount();
   }
 
   @Get('/:templateId')
   async getTemplate(
     @Param() getTemplateByIdDto: GetTemplateByIdDto,
   ): Promise<TemplateDto> {
-    const template = await this.templateService.getTemplateById(
+    const template = await this.templateCrudsService.getTemplateById(
       getTemplateByIdDto.templateId,
     );
 
@@ -48,7 +48,7 @@ export class TemplateController {
   async createTemplate(
     @Body() createTemplateDto: CreateTemplateDto,
   ): Promise<TemplateDto> {
-    return this.templateService.createTemplate(createTemplateDto);
+    return this.templateCrudsService.createTemplate(createTemplateDto);
   }
 
   @Put('/:templateId')
@@ -56,7 +56,7 @@ export class TemplateController {
     @Param() getTemplateByIdDto: GetTemplateByIdDto,
     @Body() updateTemplateDto: UpdateTemplateDto,
   ): Promise<TemplateDto> {
-    const template = await this.templateService.updateTemplate(
+    const template = await this.templateCrudsService.updateTemplate(
       getTemplateByIdDto.templateId,
       updateTemplateDto,
     );
@@ -68,7 +68,7 @@ export class TemplateController {
   async deleteTemplate(
     @Param() getTemplateByIdDto: GetTemplateByIdDto,
   ): Promise<TemplateDto> {
-    const template = await this.templateService.deleteTemplate(
+    const template = await this.templateCrudsService.deleteTemplate(
       getTemplateByIdDto.templateId,
     );
 

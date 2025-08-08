@@ -6,7 +6,7 @@ import {
 
 export class TemplateDtoUtils {
   static readonly templateDtoSchema = z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     name: z.string(),
     email: z.string().email(),
     birthDate: z.string(), // Drizzle date() returns string, not Date object

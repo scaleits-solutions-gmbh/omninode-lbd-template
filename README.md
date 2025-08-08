@@ -22,7 +22,7 @@ This service provides a comprehensive template management system with RESTful AP
 ## Project Structure
 
 ```
-omninode-lbd-template/
+omninode-serverless-template-domain/
 ├── src/
 │   ├── module/
 │   │   └── template/
